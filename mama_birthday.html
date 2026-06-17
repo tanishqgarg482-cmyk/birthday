@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 36th Birthday, Mamaji!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at center, #1a1c29 0%, #0e1017 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* Ambient Background Glows */
+        .glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, rgba(0,0,0,0) 70%);
+            top: 10%;
+            left: 5%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glow-2 {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 168, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
+            bottom: 10%;
+            right: 5%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        .milestone-badge {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0));
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: #ffd700;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+            margin-bottom: 20px;
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff 20%, #ffd700 50%, #ffa500 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 4px 15px rgba(255, 215, 0, 0.3));
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            color: #e0e0e0;
+        }
+
+        /* Modern Glassmorphic Buttons */
+        .btn-celebrate, .btn-action {
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            color: #050609;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+            margin: 10px;
+        }
+
+        .btn-celebrate:hover, .btn-action:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        /* --- VIRTUAL CAKE ENGINE (CSS) --- */
+        .cake-container {
+            display: none; /* Hidden at first */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+            margin: 40px auto;
+            position: relative;
+            height: 250px;
+            width: 300px;
+        }
+
+        .cake-container.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cake {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 120px;
+            background: #6d4c41; /* Chocolate Cake Base */
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Frosting Layers */
+        .cake::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: #ff80ab; /* Strawberry Frosting Top */
+            border-radius: 15px 15px 0 0;
+            top: 0;
+            left: 0;
+        }
+
+        .frosting-drip {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: #ff80ab;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Candle Elements */
+        .candle {
+            position: absolute;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 60px;
+            background: linear-gradient(to right, #4fc3f7, #0288d1);
+            border-radius: 4px;
+        }
+
+        .wick {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 10px;
+            background: #333;
+        }
+
+        /* Flame Effect */
+        .flame {
+            display: none; /* Hidden until clicked */
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 24px;
+            background: radial-gradient(ellipse at bottom, #ffeb3b 0%, #ff9800 50%, #f44336 100%);
+            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+            box-shadow: 0 0 20px #ff9800, 0 0 30px #ffeb3b;
+            animation: flicker 0.15s ease-in-out infinite alternate;
+        }
+
+        /* --- CONTENT DEDICATION CARDS --- */
+        .content-section {
+            padding: 40px 20px 100px 20px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ffa500);
+        }
+
+        .card h2 {
+            font-family: 'Playfair Display', serif;
+            color: #ffd700;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+        }
+
+        .letter-p {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: #e2e8f0;
+            text-align: justify;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .traits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 35px;
+        }
+
+        .trait-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 25px 20px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .trait-box:hover {
+            transform: translateY(-8px);
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.04);
+        }
+
+        .trait-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .trait-box h3 { font-size: 1.2rem; color: #ffd700; margin-bottom: 8px; }
+
+        canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        /* Animations */
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-48%) scale(1.08); opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .main-title { font-size: 3.2rem; }
+            .subtitle { font-size: 1.5rem; }
+            .card { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow"></div>
+    <div class="glow-2"></div>
+    <canvas id="visualsCanvas"></canvas>
+
+    <!-- Hero Header & Interactive Zone -->
+    <div class="hero">
+        <div class="milestone-badge">The Golden Milestone</div>
+        <h1 class="main-title">Happy 36th Birthday</h1>
+        <p class="subtitle">MAMAJI ✨</p>
+        
+        <!-- Main Action Trigger Button -->
+        <button id="celebrateBtn" class="btn-celebrate" onclick="triggerCakeArrival()">Click to Celebrate! 🎉</button>
+
+        <!-- Interactive Cake Canvas Space -->
+        <div id="cakeZone" class="cake-container">
+            <div class="candle">
+                <div id="candleFlame" class="flame"></div>
+                <div class="wick"></div>
+            </div>
+            <div class="cake">
+                <div class="frosting-drip"></div>
+            </div>
+        </div>
+
+        <!-- Secondary Light Button (Hidden until Cake appears) -->
+        <button id="lightBtn" class="btn-action" style="display: none;" onclick="lightTheCandle()">Light the Candle 🕯️</button>
+    </div>
+
+    <!-- Dedication Section -->
+    <div class="content-section">
+        
+        <div class="card">
+            <h2>Cheers to 36 Incredible Years! 🥂</h2>
+            <p class="letter-p">
+                Dear Mamaji, today marks the start of another spectacular chapter in your life. 36 looks absolutely brilliant on you! You represent the perfect blend of wisdom, success, and effortless charisma.
+            </p>
+            <p class="letter-p">
+                Thank you for being far more than just an uncle; you are a trusted advisor, a protector who effortlessly deflects mom's scoldings, and a constant inspiration to strive for greatness. Your vibe brings the entire room to life.
+            </p>
+            <p class="letter-p">
+                As you step into this amazing year, I wish you unbounded horizons of success, flawless health, timeless joy, and all the peace this universe has to offer. Keep rocking, stay iconic, and enjoy every single bit of today!
+            </p>
+            <p class="letter-p" style="text-align: right; font-weight: 600; margin-top: 35px; color: #ffd700; font-style: italic;">
+                — With highest respect and love, <br>Tanishq
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>The Legendary Persona 🏆</h2>
+            <div class="traits-container">
+                <div class="trait-box">
+                    <div class="trait-icon">🛡️</div>
+                    <h3>The Safe House</h3>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #b3b3b3;">Your ultimate shield against any storm or parent scoldings at home.</p>
+                </div>
+                <div class="trait-box">
+                    <div class="trait-icon">💼</div>
+                    <h3>The Mentor</h3>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #b3b3b3;">Bringing 36 years of incredible experiences, wisdom, and top-tier execution.</p>
+                </div>
+                <div class="trait-box">
+                    <div class="trait-icon">🔥</div>
+                    <h3>The Anchor</h3>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #b3b3b3;">The cool, composed soul who knows exactly how to light up a family gathering.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Interaction Engine Script -->
+    <script>
+        const canvas = document.getElementById('visualsCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const colors = ['#ffd700', '#ffffff', '#ffa500', '#38bdf8', '#fb7185'];
+
+        // Modern synthesis of synthesized audio pop sounds (No external files needed)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playPopSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime); // Starting frequency
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.15); // Quick sweep up
+            
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        function playSizzleSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(1500, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.3);
+            
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(isBurst = false) {
+                this.x = isBurst ? canvas.width / 2 : Math.random() * canvas.width;
+                this.y = isBurst ? canvas.height / 2 : Math.random() * canvas.height + canvas.height;
+                this.size = Math.random() * (isBurst ? 8 : 4) + 2;
+                this.speedX = isBurst ? (Math.random() * 14 - 7) : (Math.random() * 2 - 1);
+                this.speedY = isBurst ? (Math.random() * -18 - 6) : (Math.random() * -2 - 1);
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = 1;
+                this.decay = isBurst ? 0.012 : 0.002;
+                this.gravity = isBurst ? 0.22 : 0;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function burstCelebration() {
+            for (let i = 0; i < 150; i++) {
+                particles.push(new Particle(true));
+            }
+        }
+
+        // Action 1: Cake Drops down with pop sound
+        function triggerCakeArrival() {
+            playPopSound();
+            burstCelebration();
+
+            const cakeZone = document.getElementById('cakeZone');
+            const lightBtn = document.getElementById('lightBtn');
+            const celebrateBtn = document.getElementById('celebrateBtn');
+
+            cakeZone.style.display = 'block';
+            setTimeout(() => { cakeZone.classList.add('show'); }, 50);
+            
+            lightBtn.style.display = 'inline-block';
+            celebrateBtn.style.display = 'none'; // Hide first button to shift focus
+        }
+
+        // Action 2: Flame Lights up on Candle click
+        function lightTheCandle() {
+            playSizzleSound();
+            burstCelebration(); // Explode confetti again for excitement!
+            
+            const flame = document.getElementById('candleFlame');
+            flame.style.display = 'block';
+
+            // Change button text to indicate completed game
+            const lightBtn = document.getElementById('lightBtn');
+            lightBtn.innerText = "Make a Wish, Mamaji! 🎂✨";
+            lightBtn.style.background = "linear-gradient(45deg, #00cb51, #007b26)";
+            lightBtn.style.color = "#fff";
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (particles.length < 60) particles.push(new Particle(false));
+            
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+</body>
+</html>
